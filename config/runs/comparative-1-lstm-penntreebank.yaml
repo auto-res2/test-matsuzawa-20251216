@@ -1,0 +1,40 @@
+run_id: comparative-1-lstm-penntreebank
+method: SGD-ExpDecay-Baseline
+model:
+  name: LSTM-2-layer
+  num_classes: 10000
+  hidden_size: 512
+  num_layers: 2
+  input_size: 100
+  dropout: 0.5
+dataset:
+  name: Penn Treebank
+  train_split: 0.85
+  val_split: 0.05
+  test_split: 0.1
+  vocab_size: 10000
+  sequence_length: 35
+  embedding_dim: 100
+  augmentation: false
+training:
+  learning_rate: 0.1
+  batch_size: 32
+  epochs: 100
+  optimizer: sgd
+  momentum: 0.9
+  weight_decay: 0.0001
+  gradient_clip: 0.25
+  warmup_steps: null
+  scheduler: exponential
+  seed: 42
+  num_runs: 5
+  scheduler_config:
+    schedule_type: exponential
+    schedule_alpha: 0.001
+evaluation_metrics:
+  - test_accuracy_final
+  - convergence_speed_epochs
+  - generalization_gap
+  - gradient_variance_trajectory
+  - learning_rate_adaptation
+runner: gpu-runner

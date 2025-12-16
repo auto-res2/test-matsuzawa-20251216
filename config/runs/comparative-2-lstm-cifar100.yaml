@@ -1,0 +1,42 @@
+run_id: comparative-2-lstm-cifar100
+method: Adam-FixedLR-Baseline
+model:
+  name: LSTM-2-layer
+  num_classes: 100
+  hidden_size: 256
+  num_layers: 2
+  input_size: 3072
+  dropout: 0.5
+  note: "LSTM adapted for CIFAR-100 image classification"
+dataset:
+  name: CIFAR-100
+  train_split: 0.9
+  val_split: 0.1
+  test_split: 0.2
+  num_samples_train: 50000
+  num_samples_test: 10000
+  augmentation: true
+  normalization:
+    mean: [0.5071, 0.4865, 0.4409]
+    std: [0.2009, 0.1984, 0.2023]
+training:
+  learning_rate: 0.001
+  batch_size: 128
+  epochs: 150
+  optimizer: adam
+  weight_decay: 0.0001
+  gradient_clip: null
+  warmup_steps: null
+  scheduler: null
+  seed: 42
+  num_runs: 5
+  adam_config:
+    betas: [0.9, 0.999]
+    eps: 1e-08
+evaluation_metrics:
+  - test_accuracy_final
+  - convergence_speed_epochs
+  - generalization_gap
+  - gradient_variance_trajectory
+  - learning_rate_adaptation
+runner: gpu-runner

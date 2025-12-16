@@ -1,0 +1,37 @@
+run_id: comparative-2-resnet18-penntreebank
+method: Adam-FixedLR-Baseline
+model:
+  name: ResNet-18
+  num_classes: 10000
+  pretrained: false
+  input_channels: 1
+  note: "ResNet-18 adapted for sequence modeling (Penn Treebank)"
+dataset:
+  name: Penn Treebank
+  train_split: 0.85
+  val_split: 0.05
+  test_split: 0.1
+  vocab_size: 10000
+  sequence_length: 35
+  augmentation: false
+training:
+  learning_rate: 0.001
+  batch_size: 32
+  epochs: 100
+  optimizer: adam
+  weight_decay: 0.0001
+  gradient_clip: 0.25
+  warmup_steps: null
+  scheduler: null
+  seed: 42
+  num_runs: 5
+  adam_config:
+    betas: [0.9, 0.999]
+    eps: 1e-08
+evaluation_metrics:
+  - test_accuracy_final
+  - convergence_speed_epochs
+  - generalization_gap
+  - gradient_variance_trajectory
+  - learning_rate_adaptation
+runner: gpu-runner

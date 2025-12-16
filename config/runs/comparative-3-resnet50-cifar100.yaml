@@ -1,0 +1,40 @@
+run_id: comparative-3-resnet50-cifar100
+method: SGD-CosineAnnealing-Baseline
+model:
+  name: ResNet-50
+  num_classes: 100
+  pretrained: false
+  input_channels: 3
+dataset:
+  name: CIFAR-100
+  train_split: 0.9
+  val_split: 0.1
+  test_split: 0.2
+  num_samples_train: 50000
+  num_samples_test: 10000
+  augmentation: true
+  normalization:
+    mean: [0.5071, 0.4865, 0.4409]
+    std: [0.2009, 0.1984, 0.2023]
+training:
+  learning_rate: 0.1
+  batch_size: 128
+  epochs: 150
+  optimizer: sgd
+  momentum: 0.9
+  weight_decay: 0.0001
+  gradient_clip: null
+  warmup_steps: null
+  scheduler: cosine
+  seed: 42
+  num_runs: 5
+  scheduler_config:
+    schedule_type: cosine
+    total_epochs: 150
+evaluation_metrics:
+  - test_accuracy_final
+  - convergence_speed_epochs
+  - generalization_gap
+  - gradient_variance_trajectory
+  - learning_rate_adaptation
+runner: gpu-runner

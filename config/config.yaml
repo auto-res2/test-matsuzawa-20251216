@@ -1,0 +1,8 @@
+wandb:
+  entity: gengaru617-personal
+  project: "2025-11-19"
+  mode: online
+
+defaults:
+  - override hydra/job_logging: none
+  - override hydra/hydra_logging: none

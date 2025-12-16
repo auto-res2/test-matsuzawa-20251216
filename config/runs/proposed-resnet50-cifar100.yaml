@@ -1,0 +1,70 @@
+run_id: proposed-resnet50-cifar100
+method: Phase-Adaptive Variance-Guided Learning Rate Scheduling (PAVGLS)
+model:
+  name: ResNet-50
+  num_classes: 100
+  pretrained: false
+  input_channels: 3
+dataset:
+  name: CIFAR-100
+  train_split: 0.9
+  val_split: 0.1
+  test_split: 0.2
+  num_samples_train: 50000
+  num_samples_test: 10000
+  augmentation: true
+  normalization:
+    mean: [0.5071, 0.4865, 0.4409]
+    std: [0.2009, 0.1984, 0.2023]
+training:
+  learning_rate: 0.1
+  batch_size: 128
+  epochs: 150
+  optimizer: sgd
+  momentum: 0.9
+  weight_decay: 0.0001
+  gradient_clip: null
+  warmup_steps: null
+  seed: 42
+  num_runs: 5
+  pavgls_enabled: true
+  pavgls_config:
+    ema_decay_short: 0.90
+    ema_decay_long: 0.99
+    threshold_high: 1.5
+    threshold_low: 0.7
+    lambda_penalty: 0.05
+    schedule_type: exponential
+    schedule_alpha: 0.001
+    phase_multipliers:
+      exploration: 1.0
+      exploitation: 0.85
+      convergence: 0.6
+evaluation_metrics:
+  - test_accuracy_final
+  - convergence_speed_epochs
+  - generalization_gap
+  - gradient_variance_trajectory
+  - phase_transition_fidelity
+  - learning_rate_adaptation
+optuna:
+  enabled: true
+  n_trials: 20
+  search_spaces:
+    - param_name: threshold_high
+      distribution_type: uniform
+      low: 1.2
+      high: 1.8
+    - param_name: threshold_low
+      distribution_type: uniform
+      low: 0.5
+      high: 0.9
+    - param_name: lambda_penalty
+      distribution_type: loguniform
+      low: 0.01
+      high: 0.1
+    - param_name: ema_decay_short
+      distribution_type: uniform
+      low: 0.85
+      high: 0.95
+runner: gpu-runner
